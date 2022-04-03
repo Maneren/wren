@@ -1,0 +1,53 @@
+{
+  "posts": [
+    {
+      "title": "Rekonstrukce",
+      "body": "Ulice Slovanská:\n2.2.2022 - 6.2.2022\n\nBazén Berounka:\n8.6.2022 - 1.7.2022"
+    },
+    {
+      "title": "Kontejnery",
+      "body": "Ulice Sušická:\nbio odpad\n30.1.2022 - 6.2.2022\n\nUlice Pod Lesem:\nsběr starého nábytku\n31.1.2022 - 12.2.2022"
+    }
+  ],
+  "suggestions": [
+    {
+      "title": "Nová lavička",
+      "body": "Skalický park vedle pomníku J. K. Tyla",
+      "liked": "true"
+    },
+    {
+      "title": "Kontejnery",
+      "body": "Ulice U Koně\nPodél městské knihovny",
+      "liked": "false"
+    }
+  ],
+  "markers": [
+    {
+      "position": [49.7393, 13.3884],
+      "title": "Nesvítí lampa",
+      "description": "Lampa č. 16456 na rohu parku nesvítí",
+      "category": "lights",
+      "images": [],
+      "progress": "none"
+    },
+    {
+      "position": [49.7316, 13.3985],
+      "title": "Rozbitá silnice",
+      "description": "Uprostřed křižovatky je popraskaný asfalt",
+      "category": "roads",
+      "images": [],
+      "progress": "solving"
+    }
+  ],
+  "colorMappings": {
+    "category": {
+      "lights": "yellow",
+      "roads": "lightblue"
+    },
+    "progress": {
+      "none": "red",
+      "solving": "orange",
+      "solved": "green"
+    }
+  }
+}
