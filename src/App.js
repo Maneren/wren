@@ -34,8 +34,11 @@ const Button = (props) => (
 );
 
 const Post = ({ title, body }) => (
-  <div className='border border-gray-300 shadow-md rounded-xl w-100 my-2 overflow-hidden'>
-    <div className='block font-bold text-lg text-white p-1 text-center w-full bg-blue-500'>
+  <div className='border border-gray-300 shadow-md rounded-xl w-full my-2'>
+    <div
+      className={`font-bold text-lg text-white p-1 text-center w-full
+        rounded-t-xl bg-secondary`}
+    >
       {title}
     </div>
     <div className='p-5 py-3 whitespace-pre'>{body}</div>
@@ -44,7 +47,7 @@ const Post = ({ title, body }) => (
 
 const Dashboard = ({ posts }) => {
   return (
-    <div className='flex flex-col p-2 pt-2 justify-start items-stretch w-1/3'>
+    <div className='flex flex-col p-2 pt-2 justify-start items-center w-1/3 h-full overflow-x-hidden overflow-y-auto'>
       {posts.map((post, i) => (
         <Post key={i} {...post} />
       ))}
@@ -53,14 +56,14 @@ const Dashboard = ({ posts }) => {
 };
 
 const PostWithLike = ({ title, body, liked, onLike }) => (
-  <div className='border border-gray-300 shadow-md rounded-xl w-100 my-2 overflow-hidden'>
-    <div className='block font-bold text-lg text-white p-1 text-center w-full bg-blue-500'>
+  <div className='border border-gray-300 shadow-md rounded-xl w-full my-2'>
+    <div className='block font-bold text-lg text-white p-1 text-center rounded-t-xl w-full bg-primary'>
       {title}
     </div>
-    <div className='px-5 py-3 whitespace-pre'>{body}</div>
+    <div className='px-5 py-3'>{body}</div>
     <div
       className={`px-5 pb-3 text-3xl text-right ${
-        liked ? 'text-blue-400' : ''
+        liked ? 'text-secondary' : ''
       }`}
     >
       <span onClick={onLike}>
@@ -87,10 +90,12 @@ const Suggestions = ({ suggestions }) => {
   };
 
   return (
-    <div className='flex flex-col p-2 justify-start items-stretch w-1/3'>
-      {suggs.map((suggestion, i) => (
-        <PostWithLike key={i} {...suggestion} onLike={() => toggleLiked(i)} />
-      ))}
+    <div className='p-2 w-1/3 overflow-y-auto'>
+      <div className='flex flex-col justify-start items-center pb-20'>
+        {suggs.map((suggestion, i) => (
+          <PostWithLike key={i} {...suggestion} onLike={() => toggleLiked(i)} />
+        ))}
+      </div>
 
       {/* Overlay */}
       <div
@@ -104,7 +109,7 @@ const Suggestions = ({ suggestions }) => {
 
       <button
         onClick={() => setDialogOpen(true)}
-        className={`absolute bg-blue-500 text-white bottom-6 right-5 z-10 rounded-full text-2xl w-16 h-16 flex justify-center items-center  ${
+        className={`absolute bg-primary text-white bottom-6 right-5 z-10 rounded-full text-2xl w-16 h-16 flex justify-center items-center  ${
           dialogOpen ? 'hidden' : 'block'
         }`}
       >
@@ -142,7 +147,7 @@ const Map = ({ markers, addIssue }) => {
     <div className='realtive w-1/3 h-full overflow-hidden'>
       <button
         onClick={() => setDialogPhase(1)}
-        className={`absolute bg-blue-500 text-white bottom-6 right-[calc(33.333%+1rem)] z-[1000] rounded-full text-2xl w-16 h-16 flex justify-center items-center  ${
+        className={`absolute bg-primary text-white bottom-6 right-[calc(33.333%+1rem)] z-[1000] rounded-full text-2xl w-16 h-16 flex justify-center items-center  ${
           dialogPhase !== 0 ? 'hidden' : 'block'
         }`}
       >
@@ -168,11 +173,11 @@ const Map = ({ markers, addIssue }) => {
       {/* Overlay marker selector */}
       <button
         onClick={() => setDialogPhase(3)}
-        className={`'z-[5000] absolute w-[30.33%] mx-[1.5%] px-6 py-2.5 bg-blue-600
+        className={`z-[5000] absolute w-[30.33%] mx-[1.5%] px-6 py-2.5 bg-primary
           text-white font-medium text-m leading-tight uppercase rounded
-          shadow-md hover:bg-blue-700 hover:shadow-lg
-          focus:bg-blue-700 focus:shadow-lg focus:outline-none
-          focus:ring-0 active:bg-blue-800 active:shadow-lg
+          shadow-md hover:bg-highlight hover:shadow-lg
+          focus:bg-highlight focus:shadow-lg focus:outline-none
+          focus:ring-0 active:bg-active active:shadow-lg
           transition duration-150 ease-in-out bottom-[40px]
           ${dialogPhase !== 2 ? 'hidden' : 'block'}`}
       >
@@ -247,7 +252,7 @@ const App = () => {
 
   return (
     <div className='bg-gray-100 pt-14 h-screen container select-none'>
-      <div className='fixed top-0 h-14 bg-blue-500 w-full flex items-center justify-center'>
+      <div className='fixed top-0 h-14 bg-primary w-full flex items-center justify-center'>
         <span className='text-center text-3xl font-medium text-gray-200'>
           Wrepo
         </span>
@@ -260,7 +265,7 @@ const App = () => {
           }
           onClick={() => setProfile(!profile)}
         >
-          <FontAwesomeIcon className='text-xl text-blue-500' icon={faUser} />
+          <FontAwesomeIcon className='text-xl text-primary' icon={faUser} />
         </button>
       </div>
       <div className='h-[calc(100vh-6.5rem)] overflow-x-hidden overflow-y-clip'>
@@ -374,7 +379,7 @@ const IssueDialog = (
         <div className='form-group mb-6'>
           <input
             type='text'
-            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
             id='exampleInput90'
             placeholder='Nadpis'
             required
@@ -387,7 +392,7 @@ const IssueDialog = (
             required
             value={category || 'null'}
             onChange={(e) => setCategory(e.target.value)}
-            className='form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+            className='form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
           >
             <option value='null'>Kategorie problému</option>
             <option value='roads'>Silnice</option>
@@ -397,7 +402,7 @@ const IssueDialog = (
         </div>
         <div className='form-group mb-6'>
           <textarea
-            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
             id='exampleInput91'
             placeholder='Popis problému'
             rows={5}
@@ -414,7 +419,7 @@ const IssueDialog = (
             Fotografie problému
           </label>
           <input
-            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
             type='file'
             id='formFile'
             accept='image/*'
@@ -429,7 +434,7 @@ const IssueDialog = (
               e.preventDefault();
               setDialogPhase(2);
             }}
-            className='w-full px-6 py-2.5 border-blue-600 border-[1px] text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
+            className='w-full px-6 py-2.5 border-primary border-[1px] text-primary font-medium text-xs leading-tight uppercase rounded hover:bg-highlight hover:shadow-lg focus:bg-highlight focus:shadow-lg focus:outline-none focus:ring-0 active:bg-active active:shadow-lg transition duration-150 ease-in-out'
           >
             {location
               ? (
@@ -445,7 +450,7 @@ const IssueDialog = (
         <div className='form-group form-check text-center mb-6'>
           <input
             type='checkbox'
-            className='form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain mr-2 cursor-pointer'
+            className='form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary checked:border-primary focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain mr-2 cursor-pointer'
             id='exampleCheck96'
             checked={agreement}
             onChange={(e) => setAgreement(e.target.checked)}
@@ -455,14 +460,14 @@ const IssueDialog = (
             htmlFor='exampleCheck96'
           >
             Přečetl/a jsem si{' '}
-            <a href='#' className='text-blue-600 hover:text-blue-800'>
+            <a href='#' className='text-primary hover:text-active'>
               podmínky
             </a>
           </label>
         </div>
         <button
           onClick={(e) => onSubmit(e)}
-          className='w-full px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
+          className='w-full px-6 py-2.5 bg-primary text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-highlight hover:shadow-lg focus:bg-highlight focus:shadow-lg focus:outline-none focus:ring-0 active:bg-active active:shadow-lg transition duration-150 ease-in-out'
         >
           Odeslat
         </button>
@@ -507,7 +512,7 @@ const SuggestionDialog = (dialogOpen, setDialogOpen, addSuggestion) => {
         <div className='form-group mb-6'>
           <input
             type='text'
-            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
             id='exampleInput90'
             placeholder='Nadpis'
             required
@@ -517,7 +522,7 @@ const SuggestionDialog = (dialogOpen, setDialogOpen, addSuggestion) => {
         </div>
         <div className='form-group mb-6'>
           <textarea
-            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+            className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
             id='exampleInput91'
             placeholder='Popis'
             rows={6}
@@ -529,7 +534,7 @@ const SuggestionDialog = (dialogOpen, setDialogOpen, addSuggestion) => {
         <div className='form-group form-check text-center mb-6'>
           <input
             type='checkbox'
-            className='form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain mr-2 cursor-pointer'
+            className='form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary checked:border-primary focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain mr-2 cursor-pointer'
             id='exampleCheck96'
             checked={agreement}
             onChange={(e) => setAgreement(e.target.checked)}
@@ -539,14 +544,14 @@ const SuggestionDialog = (dialogOpen, setDialogOpen, addSuggestion) => {
             htmlFor='exampleCheck96'
           >
             Přečetl/a jsem si{' '}
-            <a href='#' className='text-blue-600 hover:text-blue-800'>
+            <a href='#' className='text-primary hover:text-active'>
               podmínky
             </a>
           </label>
         </div>
         <button
           onClick={(e) => onSubmit(e)}
-          className='w-full px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
+          className='w-full px-6 py-2.5 bg-primary text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-highlight hover:shadow-lg focus:bg-highlight focus:shadow-lg focus:outline-none focus:ring-0 active:bg-active active:shadow-lg transition duration-150 ease-in-out'
         >
           Odeslat
         </button>
