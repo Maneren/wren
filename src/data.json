@@ -25,22 +25,22 @@
     {
       "title": "Nová lavička",
       "body": "Myslím si že by občané ocenili lavičku na místě: Skalický park vedle pomníku J. K. Tyla",
-      "liked": "true"
+      "liked": 1
     },
     {
       "title": "Kontejnery",
       "body": "Naše zahrádkářská osada Na Kopci by ráda poprosila o přistavení kontejneru na bio odpad.",
-      "liked": "false"
+      "liked": 1
     },
     {
       "title": "Přechod pro chodce",
       "body": "Navrhuji předělání místa pro přecházení před naší školou, kde se často pohybují malé děti",
-      "liked": "true"
+      "liked": -1
     },
     {
       "title": "Kontejnery na papír",
       "body": "V ulici Přes řeku jsou neustále přeplněné kontejnery, bylo by možné přistavit další?",
-      "liked": "false"
+      "liked": 0
     }
   ],
   "markers": [
@@ -86,9 +86,9 @@
       "kontejnery": "black"
     },
     "progress": {
-      "none": "red",
-      "solving": "orange",
-      "solved": "green"
+      "none": "#ffba01",
+      "solving": "#d11d27",
+      "solved": "#00dc00"
     }
   }
 }
