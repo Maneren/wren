@@ -18,8 +18,11 @@ import {
   Marker
 } from 'react-leaflet';
 import { Iter } from '@maneren/utils';
+import mapMarkerIcon from './map_marker.png';
+import { icon } from 'leaflet';
 
 const { iter } = Iter;
+const mapMarkerIconPatch = '.' + mapMarkerIcon;
 
 const Button = (props) => (
   <button
@@ -129,12 +132,12 @@ const Suggestions = ({ suggestions }) => {
   );
 };
 
-const Map = ({ markers, addIssue }) => {
+const Map = ({ markers, addIssue, likeIssue }) => {
   const [dialogPhase, setDialogPhase] = useState(0);
   const [location, setLocation] = useState(null);
   const [markerDetails, setMarkerDetails] = useState(null);
 
-  function LocationMarker () {
+  const LocationMarker = () => {
     useMapEvents({
       click (e) {
         if (dialogPhase === 2) {
@@ -147,11 +150,18 @@ const Map = ({ markers, addIssue }) => {
     return location === null
       ? null
       : (
-      <Marker position={location}>
+      <Marker
+        position={location}
+        icon={icon({
+          iconUrl: mapMarkerIconPatch,
+          iconSize: [50, 50],
+          iconAnchor: [25, 50]
+        })}
+      >
         <Popup>Vybraná lokace</Popup>
       </Marker>
         );
-  }
+  };
 
   return (
     <div className='realtive w-1/3 h-full overflow-hidden'>
@@ -176,20 +186,20 @@ const Map = ({ markers, addIssue }) => {
       <div
         onClick={() => setDialogPhase(0)}
         className={`absolute top-[-100px] left-[calc(33.333%)] right-[calc(33.333%)] z-[2000]
-          h-[1000px] rounded-xl transition-all bg-black opacity-60
-          ${dialogPhase % 2 === 0 ? 'hidden' : 'block'}`}
+              h-[1000px] rounded-xl transition-all bg-black opacity-60
+              ${dialogPhase % 2 === 0 ? 'hidden' : 'block'}`}
       />
 
       {/* Overlay marker selector */}
       <button
         onClick={() => setDialogPhase(3)}
         className={`z-[5000] absolute w-[30.33%] mx-[1.5%] px-6 py-2.5 bg-primary
-          text-white font-medium text-m leading-tight uppercase rounded
-          shadow-md hover:bg-highlight hover:shadow-lg
-          focus:bg-highlight focus:shadow-lg focus:outline-none
-          focus:ring-0 active:bg-active active:shadow-lg
-          transition duration-150 ease-in-out bottom-[40px]
-          ${dialogPhase !== 2 ? 'hidden' : 'block'}`}
+              text-white font-medium text-m leading-tight uppercase rounded
+              shadow-md hover:bg-highlight hover:shadow-lg
+              focus:bg-highlight focus:shadow-lg focus:outline-none
+              focus:ring-0 active:bg-active active:shadow-lg
+              transition duration-150 ease-in-out bottom-[40px]
+              ${dialogPhase !== 2 ? 'hidden' : 'block'}`}
       >
         Vybrat
       </button>
@@ -199,11 +209,15 @@ const Map = ({ markers, addIssue }) => {
         className={`absolute w-[33.33%] h-5/6 ${
           markerDetails ? 'translate-y-0' : 'translate-y-full'
         } z-[5000] bottom-0 bg-white rounded-t-xl transition
-            px-6 overflow-y-auto overflow-x-hidden duration-300
-            shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)]`}
+                px-6 overflow-y-auto overflow-x-hidden duration-300
+                shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)]`}
       >
-        {markerDetails &&
-          MarkerDetailsComponent(markerDetails, () => setMarkerDetails(null))}
+        {markerDetails && (
+          <MarkerDetailsComponent
+            markerDetails={markerDetails}
+            close={() => setMarkerDetails(null)}
+          />
+        )}
       </div>
 
       <MapContainer
@@ -225,7 +239,7 @@ const Map = ({ markers, addIssue }) => {
             <CircleMarker
               key={i}
               center={position}
-              radius={10}
+              radius={11}
               color={data.colorMappings.category[category]}
               fillColor={data.colorMappings.progress[progress]}
               weight={5}
@@ -360,7 +374,8 @@ const IssueDialog = (
       description,
       images: base64Images,
       position: [location.lat, location.lng],
-      progress: 'none'
+      progress: 'none',
+      liked: 0
     };
 
     setLocation(null);
@@ -380,7 +395,7 @@ const IssueDialog = (
       className={
         'absolute bg-white bottom-20 left-[calc(33.333%+1rem)] right-[calc(33.333%+1rem)] ' +
         'h-5/6 rounded-xl flex justify-center items-center ' +
-        'transition-all  shadow-2xl ' +
+        'transition-all  shadow-2xl px-2 ' +
         (dialogPhase % 2 === 1 ? 'z-[3000] opacity-100' : 'z-[-3000] opacity-0')
       }
     >
@@ -407,6 +422,8 @@ const IssueDialog = (
             <option value='roads'>Silnice</option>
             <option value='lights'>Osvětlení</option>
             <option value='trash'>Odpady</option>
+            <option value='green'>Zeleň</option>
+            <option value='benches'>Lavičky a hřiště</option>
           </select>
         </div>
         <div className='form-group mb-6'>
@@ -437,24 +454,29 @@ const IssueDialog = (
             onChange={(e) => setImages(e.target.files)}
           />
         </div>
-        <div className='form-group mb-6'>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              setDialogPhase(2);
-            }}
-            className='w-full px-6 py-2.5 border-primary border-[1px] text-primary font-medium text-xs leading-tight uppercase rounded hover:bg-highlight hover:shadow-lg focus:bg-highlight focus:shadow-lg focus:outline-none focus:ring-0 active:bg-active active:shadow-lg transition duration-150 ease-in-out'
-          >
-            {location
-              ? (
-                  'Vybraná lokace'
-                )
-              : (
-              <>
+        <div className='form-group mb-6 flex items-center justify-center'>
+          {
+            <>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setDialogPhase(2);
+                }}
+                className='flex-grow mx-1 px-6 py-2.5 border-primary border-[1px] text-primary font-medium text-xs leading-tight uppercase rounded hover:bg-highlight hover:shadow-lg focus:bg-highlight focus:shadow-lg focus:outline-none focus:ring-0 active:bg-active active:shadow-lg transition duration-150 ease-in-out'
+              >
                 <FontAwesomeIcon icon={faLocationDot} /> Lokace
-              </>
-                )}
-          </button>
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setDialogPhase(2);
+                }}
+                className='flex-grow mx-1 px-6 py-2.5 border-secondary border-[1px] text-secondary font-medium text-xs leading-tight uppercase rounded hover:bg-highlight hover:shadow-lg focus:bg-highlight focus:shadow-lg focus:outline-none focus:ring-0 active:bg-active active:shadow-lg transition duration-150 ease-in-out'
+              >
+                <FontAwesomeIcon icon={faLocationDot} /> GPS
+              </button>
+            </>
+          }
         </div>
         <div className='form-group form-check text-center mb-6'>
           <input
@@ -569,24 +591,65 @@ const SuggestionDialog = (dialogOpen, setDialogOpen, addSuggestion) => {
   );
 };
 
-const MarkerDetailsComponent = (markerDetails, close) => {
+const MarkerDetailsComponent = ({ markerDetails, close }) => {
+  const [, setState] = useState();
+
+  const toggleLiked = (target) => {
+    markerDetails.liked = markerDetails.liked === target ? 0 : target;
+    setState({});
+  };
+
+  const progressText = {
+    none: 'Nahlášeno',
+    solving: 'Řeší se',
+    solved: 'Vyřešeno'
+  };
+
   return (
     <>
-      <span className='text-2xl absolute right-3 top-2' onClick={close}>
+      <span className='text-2xl absolute right-4 top-3' onClick={close}>
         <FontAwesomeIcon icon={faXmark} />
       </span>
       <div
-        className={`bg-[${
-          data.colorMappings.category[markerDetails.category]
-        }] -400
-             w-[100vw] h-2 z-[10000] -ml-6 rounded-t-xl`}
+        className={`
+             w-[100vw] h-3 z-[10000] -ml-6 mb-1 rounded-t-xl`}
+        style={{
+          backgroundColor: data.colorMappings.category[markerDetails.category]
+        }}
       />
       <h2 className='text-2xl py-2 px-2'>{markerDetails.title}</h2>
+      <span
+        className='px-2'
+        style={{
+          color: data.colorMappings.progress[markerDetails.progress]
+        }}
+      >
+        {progressText[markerDetails.progress]}
+      </span>
       <div className='px-2'>{markerDetails.description}</div>
       <div className='flex justify-center flex-col pt-2'>
         {markerDetails.images.map((image, i) => (
           <img className='my-4 mx-2 rounded-xl' src={image} key={i}></img>
         ))}
+      </div>
+
+      <div className='px-5 pb-3 mt-5 text-3xl text-right'>
+        <span
+          onClick={() => toggleLiked(1)}
+          className={`${
+            markerDetails.liked === 1 ? 'text-secondary' : 'text-blue-100'
+          }`}
+        >
+          <FontAwesomeIcon icon={faThumbsUp} />
+        </span>
+        <span
+          onClick={() => toggleLiked(-1)}
+          className={`ml-2 ${
+            markerDetails.liked === -1 ? 'text-secondary' : 'text-blue-100'
+          }`}
+        >
+          <FontAwesomeIcon icon={faThumbsDown} />
+        </span>
       </div>
     </>
   );
