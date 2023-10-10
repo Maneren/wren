@@ -158,7 +158,7 @@ const Map = ({ markers, addIssue, likeIssue }) => {
           iconAnchor: [25, 50]
         })}
       >
-        <Popup>Vybraná lokace</Popup>
+        <Popup>Selected location</Popup>
       </Marker>
         );
   };
@@ -265,7 +265,7 @@ const App = () => {
 
   const [newMarkers, setNewMarkers] = useState([]);
 
-  const screens = ['Nástěnka', 'Mapa', 'Návrhy'];
+  const screens = ['Dashboard', 'Map', 'Suggestions'];
 
   const markers = [...data.markers, ...newMarkers];
 
@@ -405,7 +405,7 @@ const IssueDialog = (
             type='text'
             className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
             id='exampleInput90'
-            placeholder='Nadpis'
+            placeholder='Title'
             required
             value={title || ''}
             onChange={(e) => setTitle(e.target.value)}
@@ -418,19 +418,19 @@ const IssueDialog = (
             onChange={(e) => setCategory(e.target.value)}
             className='form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
           >
-            <option value='null'>Kategorie problému</option>
-            <option value='roads'>Silnice</option>
-            <option value='lights'>Osvětlení</option>
-            <option value='trash'>Odpady</option>
-            <option value='green'>Zeleň</option>
-            <option value='benches'>Lavičky a hřiště</option>
+            <option value='null'>Category</option>
+            <option value='roads'>Roads</option>
+            <option value='lights'>Lightning</option>
+            <option value='trash'>Trash</option>
+            <option value='green'>Green</option>
+            <option value='benches'>Benches and playgrounds</option>
           </select>
         </div>
         <div className='form-group mb-6'>
           <textarea
             className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
             id='exampleInput91'
-            placeholder='Popis problému'
+            placeholder='Issue description'
             rows={5}
             required
             value={description || ''}
@@ -442,7 +442,7 @@ const IssueDialog = (
             htmlFor='formFile'
             className='form-label inline-block mb-2 text-gray-700'
           >
-            Fotografie problému
+            Photo of the issue
           </label>
           <input
             className='form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none'
@@ -464,7 +464,7 @@ const IssueDialog = (
                 }}
                 className='flex-grow mx-1 px-6 py-2.5 border-primary border-[1px] text-primary font-medium text-xs leading-tight uppercase rounded hover:bg-highlight hover:shadow-lg focus:bg-highlight focus:shadow-lg focus:outline-none focus:ring-0 active:bg-active active:shadow-lg transition duration-150 ease-in-out'
               >
-                <FontAwesomeIcon icon={faLocationDot} /> Lokace
+                <FontAwesomeIcon icon={faLocationDot} /> From map
               </button>
               <button
                 onClick={(e) => {
@@ -490,9 +490,9 @@ const IssueDialog = (
             className='form-check-label inline-block text-gray-800'
             htmlFor='exampleCheck96'
           >
-            Přečetl/a jsem si{' '}
+            I have read and agreed to{' '}
             <a href='#' className='text-primary hover:text-active'>
-              podmínky
+              terms and conditions
             </a>
           </label>
         </div>
@@ -500,7 +500,7 @@ const IssueDialog = (
           onClick={(e) => onSubmit(e)}
           className='w-full px-6 py-2.5 bg-primary text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-highlight hover:shadow-lg focus:bg-highlight focus:shadow-lg focus:outline-none focus:ring-0 active:bg-active active:shadow-lg transition duration-150 ease-in-out'
         >
-          Odeslat
+          Submit
         </button>
       </form>
     </div>
@@ -574,9 +574,9 @@ const SuggestionDialog = (dialogOpen, setDialogOpen, addSuggestion) => {
             className='form-check-label inline-block text-gray-800'
             htmlFor='exampleCheck96'
           >
-            Přečetl/a jsem si{' '}
+            I have read and agreed to{' '}
             <a href='#' className='text-primary hover:text-active'>
-              podmínky
+              terms and conditions
             </a>
           </label>
         </div>
@@ -600,9 +600,9 @@ const MarkerDetailsComponent = ({ markerDetails, close }) => {
   };
 
   const progressText = {
-    none: 'Nahlášeno',
-    solving: 'Řeší se',
-    solved: 'Vyřešeno'
+    none: 'Submitted',
+    solving: 'In progress',
+    solved: 'Solved'
   };
 
   return (
